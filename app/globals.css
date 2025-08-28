@@ -1,26 +1,35 @@
-@import "tailwindcss";
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  color-scheme: light;
+  --fa-bg: 246 247 251;      /* gris muy claro */
+  --fa-primary: 28 100 242;  /* azul profesional */
+  --fa-ink: 17 24 39;        /* gris-900 */
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  @apply text-gray-900;
+  background:
+    radial-gradient(60% 50% at 20% 10%, rgba(28,100,242,0.07), transparent 60%),
+    radial-gradient(50% 40% at 90% 10%, rgba(28,100,242,0.05), transparent 60%),
+    rgb(var(--fa-bg));
+  min-height: 100dvh;
 }
+
+.container-narrow { @apply max-w-md sm:max-w-lg mx-auto px-4; }
+.card { @apply bg-white/90 backdrop-blur shadow-xl rounded-2xl p-6 sm:p-8; }
+.card-title { @apply text-2xl sm:text-3xl font-semibold mb-2; }
+.card-subtitle { @apply text-sm text-gray-500 mb-6 text-center; }
+.btn { @apply inline-flex items-center justify-center rounded-2xl px-4 py-3 font-medium shadow-sm transition active:scale-[.99]; }
+.btn-primary { @apply btn bg-blue-600 text-white hover:bg-blue-700 shadow-md; }
+.btn-secondary { @apply btn bg-gray-200 text-gray-900 hover:bg-gray-300; }
+.input { @apply w-full rounded-xl border border-gray-200 bg-white/70 backdrop-blur px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-400; }
+.label { @apply text-sm font-medium text-gray-700; }
+.help { @apply text-sm text-gray-500; }
+.error { @apply text-sm text-red-600; }
+.success { @apply text-sm text-green-600; }
+.form-grid { @apply grid gap-4; }
+.logo-wrap { @apply flex items-center gap-2; }
+.logo-title { @apply text-xl font-semibold tracking-tight; }

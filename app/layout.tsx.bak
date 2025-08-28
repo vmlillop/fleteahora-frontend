@@ -16,7 +16,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         {/* Color de la barra del navegador en móvil */}
         <meta name="theme-color" content="#0a0a0a" />
       </head>
-      <body className="bg-blue-50">
+      <body>
         <Header />
         {children}
       </body>

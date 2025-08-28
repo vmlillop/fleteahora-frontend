@@ -1,0 +1,77 @@
+'use client'
+import { useState } from 'react'
+import Logo from '@/components/Logo'
+
+const IS_DEMO = process.env.NEXT_PUBLIC_DEMO === 'true'
+const MAILHOG_URL = process.env.NEXT_PUBLIC_MAILHOG_URL || 'http://52.90.55.128:8025'
+
+export default function ForgotPage() {
+  const [email, setEmail] = useState('')
+  const [loading, setLoading] = useState(false)
+  const [sent, setSent] = useState(false)
+  const [error, setError] = useState<string|null>(null)
+
+  async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault()
+    setError(null); setLoading(true)
+    try {
+      const res = await fetch('/api/auth/forgot', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: email.trim() }),
+      })
+      // Respuesta neutra: consideramos "enviado" en 200, 400 o 404
+      if (res.ok || res.status === 400 || res.status === 404) {
+        setSent(true)
+      } else {
+        const data = await res.json().catch(()=>({}))
+        throw new Error(data?.error || `Error ${res.status}`)
+      }
+    } catch (err:any) {
+      setError(String(err.message || err))
+    } finally { setLoading(false) }
+  }
+
+  return (
+    <main className="container-narrow py-8 sm:py-12">
+      <div className="card">
+        <div className="flex flex-col items-center gap-3 mb-6">
+          <Logo size={140} />
+          <h1 className="card-title mb-0">Recuperar contraseña</h1>
+          <p className="card-subtitle text-center">Te enviaremos un enlace para restablecer tu clave.</p>
+        </div>
+
+        {sent ? (
+          <div className="rounded-xl border border-green-200 bg-green-50 px-4 py-3 text-green-700 space-y-1">
+            <div>✅ Hemos recibido tu solicitud.</div>
+            <div>Si el correo está registrado, recibirás un enlace de restablecimiento en los próximos minutos.</div>
+            {IS_DEMO && (
+              <div className="text-sm">
+              </div>
+            )}
+          </div>
+        ) : (
+          <form onSubmit={onSubmit} className="space-y-4" noValidate>
+            <div className="space-y-1">
+              <label className="label" htmlFor="email">Correo registrado</label>
+              <input
+                id="email"
+                type="email"
+                inputMode="email"
+                required
+                className="input"
+                placeholder="nombre@dominio.com"
+                value={email}
+                onChange={e=>setEmail(e.target.value)}
+              />
+            </div>
+            {error && <p className="error">{error}</p>}
+            <button className="btn-primary w-full" disabled={loading}>
+              {loading ? 'Enviando…' : 'Enviar enlace'}
+            </button>
+          </form>
+        )}
+      </div>
+    </main>
+  )
+}

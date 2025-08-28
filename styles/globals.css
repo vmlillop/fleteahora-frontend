@@ -1,0 +1,102 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: light;
+  --fa-bg: 246 247 251;      /* gris muy claro */
+  --fa-primary: 28 100 242;  /* azul profesional */
+  --fa-ink: 17 24 39;        /* gris-900 */
+}
+
+body {
+  @apply text-gray-900;
+  background:
+    radial-gradient(60% 50% at 20% 10%, rgba(28,100,242,0.07), transparent 60%),
+    radial-gradient(50% 40% at 90% 10%, rgba(28,100,242,0.05), transparent 60%),
+    rgb(var(--fa-bg));
+  min-height: 100dvh;
+}
+
+.container-narrow { @apply max-w-md sm:max-w-lg mx-auto px-4; }
+.card { @apply bg-white/90 backdrop-blur shadow-xl rounded-2xl p-6 sm:p-8; }
+.card-title { @apply text-2xl sm:text-3xl font-semibold mb-2; }
+.card-subtitle { @apply text-sm text-gray-500 mb-6; }
+.btn { @apply inline-flex items-center justify-center rounded-xl px-4 py-3 font-medium shadow-sm transition active:scale-[.99]; }
+.btn-primary { @apply btn bg-blue-600 text-white hover:bg-blue-700; }
+.btn-secondary { @apply btn bg-gray-200 text-gray-900 hover:bg-gray-300; }
+.input { @apply w-full rounded-xl border border-gray-200 bg-white/70 backdrop-blur px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-400; }
+.label { @apply text-sm font-medium text-gray-700; }
+.help { @apply text-sm text-gray-500; }
+.error { @apply text-sm text-red-600; }
+.success { @apply text-sm text-green-600; }
+.form-grid { @apply grid gap-4; }
+.logo-wrap { @apply flex items-center gap-2; }
+.logo-title { @apply text-xl font-semibold tracking-tight; }
+
+/* ====== Auth: tamaño uniforme para todas las pantallas ====== */
+.container-narrow {
+  max-width: 420px;   /* mismo ancho para login/register/forgot/reset */
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+
+/* La primera .card dentro de los flows de auth tendrá alto uniforme */
+.container-narrow > .card {
+  max-height: 560px;            /* alto estándar */
+  overflow-y: auto;             /* si el contenido excede, hace scroll interno */
+  scrollbar-gutter: stable both-edges; /* evita “salto” al aparecer scroll */
+}
+
+/* En móvil muy chico, permitir un poco más de alto antes de scroll */
+@media (max-width: 360px) {
+  .container-narrow > .card { max-height: 600px; }
+}
+
+/* ====== Auth: altura fija uniforme ====== */
+.auth-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: calc(100vh - 4rem); /* ocupa toda la pantalla menos header */
+}
+
+.auth-card {
+  width: 100%;
+  max-width: 420px;   /* mismo ancho */
+  height: 600px;      /* mismo alto fijo */
+  display: flex;
+  flex-direction: column;
+  justify-content: center; /* centra su contenido */
+}
+
+/* ====== Fix ancho auth en desktop ====== */
+/* Evita que la tarjeta se estire a todo el ancho del viewport en PC */
+main.auth-wrapper > .card.auth-card {
+  width: min(92vw, 420px) !important; /* 92% del viewport o 420px, lo que sea menor */
+  max-width: 420px !important;        /* tope duro */
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* En pantallas medianas/grandes, fija aún más el ancho */
+@media (min-width: 768px) {
+  main.auth-wrapper > .card.auth-card {
+    width: 420px !important;
+  }
+}
+
+/* Un poquito de respiración lateral en desktop */
+@media (min-width: 1024px) {
+  main.auth-wrapper {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+}
+
+/* ===== Revert auth fixed sizing (vuelta al layout original) ===== */
+main.auth-wrapper > .card.auth-card { all: unset; }
+.auth-wrapper, .auth-card { all: unset; }
+.container-narrow { max-width: 720px; margin: 0 auto; padding-left: 1rem; padding-right: 1rem; }
